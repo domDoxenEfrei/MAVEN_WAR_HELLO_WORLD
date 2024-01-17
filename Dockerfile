@@ -10,8 +10,8 @@ WORKDIR $CATALINA_HOME/webapps
 # Copy the WAR file from the target directory to the webapps directory
 COPY target/your-web-app.war .
 
-# Expose the default Tomcat port (8080)
-EXPOSE 8080
+# Expose the default Tomcat port (8088)
+EXPOSE 8088
 
 # Start Tomcat when the container runs
 CMD ["catalina.sh", "run"]
