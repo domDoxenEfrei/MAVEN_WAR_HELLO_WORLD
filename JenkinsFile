@@ -35,7 +35,7 @@ stages{
             steps{
                 echo 'Deploy Docker'
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh "env user=${DOCKER_USERNAME} password=${DOCKER_PASSWORD} ansible-playbook deploy-docker.yml"
+                    sh "env DOCKER_USERNAME=${DOCKER_USERNAME} DOCKER_PASSWORD=${DOCKER_PASSWORD} ansible-playbook deploy-docker.yml"
                 }
         }        
     }
