@@ -27,12 +27,12 @@ stages{
                 echo 'And for that you need to create the appropriate credentials to access the github account in Jenkins'
                 echo 'Then you need to push this image to the public registry dockerhub into your account'
                 echo 'Use the docker push command'
-                // withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                       // sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-                    // }
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+                    }
                     
                 // Push Docker image to Docker Hub
-               // sh 'docker push ernestefrei/devopslab'
+                sh 'docker push ernestefrei/devopslab:latest'
             }
         }
   
