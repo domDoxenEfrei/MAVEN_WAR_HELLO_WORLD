@@ -32,7 +32,7 @@ stages{
 
             echo 'Use the docker push command'
             // Push Docker image to Docker Hub
-            sh "docker push ernestefrei/devopslab:latest"
+            sh "docker push ernestefrei/devopsproject:latest"
         }
     }
   
