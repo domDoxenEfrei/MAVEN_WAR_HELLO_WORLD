@@ -1,4 +1,4 @@
-DevOps_Project{
+pipeline{
     agent any
 
 stages{
