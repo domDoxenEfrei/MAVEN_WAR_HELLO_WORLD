@@ -28,7 +28,7 @@ stages{
             // echo 'Then you need to push this image to the public registry dockerhub into your account'
             // echo 'Use the docker push command'
             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                sh "docker login -u ${ENV.DOCKER_USERNAME} -p ${ENV.DOCKER_PASSWORD}"
+                sh "sudo docker login -u ${ENV.DOCKER_USERNAME} -p ${ENV.DOCKER_PASSWORD}"
                 }
                     
             // Push Docker image to Docker Hub
