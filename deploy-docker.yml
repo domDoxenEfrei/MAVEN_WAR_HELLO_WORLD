@@ -55,11 +55,6 @@
   become: true
 
   tasks:
-    - name: log into docker hub registry using the docker_login module
-      docker_login:
-        username: "ErnestEfrei"
-        password: "Galant93!"
-
     - name: Pull image and create the container using docker_container
       docker_image:
         name: ernestefrei/devopsproject:latest
