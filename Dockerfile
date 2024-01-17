@@ -4,14 +4,7 @@
 # Use the official Tomcat 8 image as the base image
 FROM tomcat:8
 
-# Set the working directory to the Tomcat webapps directory
-WORKDIR $CATALINA_HOME/webapps
-
-# Copy the WAR file from the target directory to the webapps directory
-COPY target/your-web-app.war .
-
-# Expose the default Tomcat port (8088)
+LABEL maintainer="ernest@mail.com"
+ADD target/spring-boot-deployment.war /usr/local/tomcat/webapps/
 EXPOSE 8088
-
-# Start Tomcat when the container runs
 CMD ["catalina.sh", "run"]
