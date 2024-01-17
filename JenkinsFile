@@ -1,4 +1,4 @@
-tra-pipeline{
+pipeline{
     agent any
     tools {
       maven 'MVN_HOME'
