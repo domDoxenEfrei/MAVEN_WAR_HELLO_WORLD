@@ -22,7 +22,7 @@ stages{
     stage('DockerHub Push'){
         steps{
             echo 'Login to Docker-Hub with docker-hub-pass credentials'
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-hub-pass', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                 sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                 }
 
