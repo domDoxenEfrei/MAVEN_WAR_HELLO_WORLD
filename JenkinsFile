@@ -34,7 +34,7 @@ stages{
     stage('Docker Deploy'){
             steps{
                 echo 'Deploy Docker'
-                sh "ansible-playbook deploy-docker.yml --args="user=ErnestEfrei password=Galant93!"
+                sh "ansible-playbook deploy-docker.yml --extra-vars user=ErnestEfrei password=Galant93!"
             }
         }        
     }
