@@ -34,7 +34,7 @@ stages{
     stage('Docker Deploy'){
             steps{
                 echo 'Deploy Docker'
-                sh "ansible-playbook deploy-docker.yml --extra-vars ansible_ssh_user=root ansible_ssh_pass=toor"
+                sh "ansible-playbook --user=root -vvv deploy-docker.yml"
                 //ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
         }        
     }
