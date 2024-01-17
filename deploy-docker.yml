@@ -4,15 +4,41 @@
   become_user: root
   tasks:
     - name: Install yum-utils (use the yum module)
+      yum:
+        name: yum-utils
+        state: present
 
     - name: Download Docker repository file using the get_url
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
 
-    - name: Install Docker packages (engine) using yum module, reference https://docs.docker.com/engine/install/centos/#installation-methods
+    - name: Install Docker packages (engine) using yum module
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
 
     - name: Start Docker service using the systemd module
-        
-    - name: log into docker hub registry using the docker_login module
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Log into Docker Hub registry using the docker_login module
+      docker_login:
+        username: your_dockerhub_username
+        password: your_dockerhub_password
 
     - name: Pull image and create the container using docker_container
-    
+      docker_container:
+        name: your_container_name
+        image: your_dockerhub_username/your_image:your_tag
+        state: started
+
     - name: Start the container using docker_container
+      docker_container:
+        name: your_container_name
+        state: started
