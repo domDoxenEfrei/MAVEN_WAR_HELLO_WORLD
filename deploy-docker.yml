@@ -1,18 +1,54 @@
 ---
-- hosts: linuxclient1
+- name: Install and Deploy docker on linuxclient1
+  hosts: linuxclient1
   become: True
   become_user: root
   tasks:
     - name: Install yum-utils (use the yum module)
+      yum:
+        name: yum-utils
+        state: present
 
     - name: Download Docker repository file using the get_url
+      shell: sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
     - name: Install Docker packages (engine) using yum module, reference https://docs.docker.com/engine/install/centos/#installation-methods
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
 
     - name: Start Docker service using the systemd module
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
         
     - name: log into docker hub registry using the docker_login module
+      docker_login:
+        username: {{ user }}
+        password: {{ password }}
 
     - name: Pull image and create the container using docker_container
+      docker_image:
+        name: ernestefrei/devopsproject:latest
+        source: pull
     
     - name: Start the container using docker_container
+      docker_container:
+        name: tomcat-devopsproject
+        image: ernestefrei/devopsproject:latest
+        state: started
+        tty: true
+        auto_remove: true
+        ports:
+          - "8088:8088"
+          
+    - name: Log out of DockerHub
+      docker_login:
+        state: absent
+    
