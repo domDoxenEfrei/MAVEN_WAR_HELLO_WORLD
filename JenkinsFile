@@ -3,6 +3,7 @@ pipeline{
     tools {
       maven 'MVN_HOME'
     }
+
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-creds')
     }
