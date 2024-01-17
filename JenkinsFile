@@ -8,7 +8,7 @@ pipeline{
        stage('Maven Build') {
          steps {
            echo 'Here you should trigger a maven build of your application using either bat(windows) or sh(linux)'
-           sh 'meaven_home clean install'
+           sh 'meaven clean install'
          }
        }
        
