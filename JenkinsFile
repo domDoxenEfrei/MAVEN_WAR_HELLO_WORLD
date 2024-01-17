@@ -28,7 +28,7 @@ pipeline{
                 echo 'Then you need to push this image to the public registry dockerhub into your account'
                 echo 'Use the docker push command'
                 withcredentials([usernamePassword(credentialsId: 'docker-hub-pass',passwordVariable: 'password', usernameVariable: 'username')]){
-                bat "docker login -u $(env.username) -p $(env.password)"
+                bat "docker login -u \$(env.username) -p \$(env.password)"
                 }
 
                 bat "docker push emileastih/devopslab:1.0"
