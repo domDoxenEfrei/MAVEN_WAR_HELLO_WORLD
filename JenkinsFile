@@ -33,7 +33,10 @@ stages{
   
     stage('Docker Deploy'){
             steps{
-                 	// sh "ansible-playbook deploy-docker.yml
+                echo 'Deploy Docker'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                 	// sh "ansible-playbook deploy-docker.yml --extra-vars user=${DOCKER_USERNAME} password=${DOCKER_PASSWORD}
+                }
             }
         }        
     }
