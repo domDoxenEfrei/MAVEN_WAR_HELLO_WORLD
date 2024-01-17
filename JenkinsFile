@@ -26,11 +26,12 @@ stages{
             // echo 'You should first login to your github account using the withCredentials synatx'
             // echo 'And for that you need to create the appropriate credentials to access the github account in Jenkins'
             echo 'Then you need to push this image to the public registry dockerhub into your account'
-            sh "sudo su"
-               withCredentials([usernamePassword(credentialsId: 'dockerhub-hub-pass', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                    echo 'yeah!'
-                  }
+              // withCredentials([usernamePassword(credentialsId: 'dockerhub-hub-pass', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                 //   sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                //  }
+      withCredentials([string(credentialsId: 'DockerHubPwd', variable: 'dockerpwd')]) {
+      sh "docker login -u username -p ${dockerpwd}"
+            }
 
             echo 'Use the docker push command'
             // Push Docker image to Docker Hub
