@@ -62,7 +62,7 @@
     
     - name: Start the container using docker_container
       docker_container:
-        name: tomcat-devopsproject
+        name: ernestefrei/devopsproject
         image: ernestefrei/devopsproject:latest
         state: started
         tty: true
