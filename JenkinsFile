@@ -3,6 +3,9 @@ pipeline{
     tools {
       maven 'MVN_HOME'
     }
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-creds')
+    }
 
 stages{
     stage('Maven Build') {
@@ -27,9 +30,11 @@ stages{
             // echo 'And for that you need to create the appropriate credentials to access the github account in Jenkins'
             // echo 'Then you need to push this image to the public registry dockerhub into your account'
             // echo 'Use the docker push command'
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                sh "sudo docker login -u ${ENV.DOCKER_USERNAME} -p ${ENV.DOCKER_PASSWORD}"
-                }
+            sh "sudo docker login -u ${DOCKER_HUB_CREDENTIALS_USR} -p ${DOCKER_HUB_CREDENTIALS_PSW}"
+
+           // withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+            //    sh "sudo docker login -u ${ENV.DOCKER_USERNAME} -p ${ENV.DOCKER_PASSWORD}"
+              //  }
                     
             // Push Docker image to Docker Hub
             sh "docker push ernestefrei/devopslab:latest"
