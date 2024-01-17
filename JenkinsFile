@@ -3,6 +3,11 @@ pipeline{
     tools {
       maven 'MVN_HOME'
     }
+	
+	environment {
+        // Define the credential ID and the variable names
+        DOCKER_CREDENTIALS = credentials('docker-hub-pass')
+    }
 
 stages{
     stage('Maven Build') {
@@ -22,9 +27,7 @@ stages{
     stage('DockerHub Push'){
         steps{
             echo 'Login to Docker-Hub with docker-hub-pass credentials'
-            withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                }
+            sh "docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}"
 
             echo 'Push Docker image to Docker Hub'
             sh "docker push ernestefrei/devopsproject:latest"
@@ -34,8 +37,8 @@ stages{
     stage('Docker Deploy'){
             steps{
                 echo 'Deploy Docker'
-                sh "ansible-playbook --user=root -vvv deploy-docker.yml"
-                //ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+                //sh "ansible-playbook --user=root -vvv deploy-docker.yml"
+                ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
         }        
     }
     
