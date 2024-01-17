@@ -17,7 +17,8 @@ pipeline{
                 echo 'In this step you should build your docker image using the docker build command'
                 echo 'So you need to build an image from the WAR that you generated previously'
                 echo 'Remember that starting point of your image should be tomcat in order to serve the application on the web'
-                bat "docker build . -t domdoxe/finalproj:1.0"
+                bat "docker build C:\\Users\\T7429DD\\Desktop\\devops\\MAVEN_WAR_HELLO_WORLD -t domdoxe/finalproj:1.0"
+
             }
         }
         
