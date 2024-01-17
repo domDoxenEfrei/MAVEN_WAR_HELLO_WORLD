@@ -6,11 +6,8 @@ FROM tomcat:9.0-jdk11
 
 LABEL maintainer="ernest@mail.com"
 
-# Set the working directory to the Tomcat webapps directory
-WORKDIR $CATALINA_HOME/webapps
-
 # Copy the WAR file from the target directory to the webapps directory
-COPY target/spring-boot-deployment.war .
+ADD target/spring-boot-deployment.war /user/local/tomcat/webapps
 
 EXPOSE 8088
 
