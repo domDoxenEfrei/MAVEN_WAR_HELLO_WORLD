@@ -62,13 +62,13 @@
     
     - name: Start the container using docker_container
       docker_container:
-        name: ernestefrei/devopsproject
+        name: tomcat_devops
         image: ernestefrei/devopsproject:latest
         state: started
         tty: true
         auto_remove: true
         ports:
-          - "8080:8080"
+          - "8088:8088"
           
     - name: Log out of DockerHub
       docker_login:
