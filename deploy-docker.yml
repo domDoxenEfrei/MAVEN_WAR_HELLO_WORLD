@@ -5,6 +5,9 @@
   become_user: root
 
   tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
     - name: Install yum-utils (use the yum module)
       yum:
         name: yum-utils
