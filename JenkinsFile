@@ -4,10 +4,6 @@ pipeline{
       maven 'MVN_HOME'
     }
 
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-creds')
-    }
-
 stages{
     stage('Maven Build') {
         steps {
