@@ -4,10 +4,6 @@ pipeline{
       maven 'MVN_HOME'
     }
 
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker')
-    }
-
 stages{
     stage('Maven Build') {
         steps {
@@ -39,7 +35,7 @@ stages{
             steps{
                 echo 'Deploy Docker'
                 //sh "ansible-playbook deploy-docker.yml"
-                ansiblePlaybook credentialsId: 'docker', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+                ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
         }        
     }
     
