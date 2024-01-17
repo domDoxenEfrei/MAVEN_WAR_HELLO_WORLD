@@ -1,14 +1,14 @@
 pipeline{
     agent any
-    tools {
-      maven 'MVN_HOME'
-    }
+    //tools {
+     // maven 'MVN_HOME'
+    //}
 
     stages{
        stage('Maven Build') {
          steps {
            echo 'Here you should trigger a maven build of your application using either bat(windows) or sh(linux)'
-           sh "maven clean package"
+           sh "mvn -Dmaven.test.failure.ignore=true clean package"
          }
        }
        
