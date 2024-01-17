@@ -1,4 +1,4 @@
-pipeline{
+tra-pipeline{
     agent any
     tools {
       maven 'MVN_HOME'
@@ -34,7 +34,7 @@ stages{
     stage('Docker Deploy'){
             steps{
                 echo 'Deploy Docker'
-                sh "ansible-playbook deploy-docker.yml"
+                sh "ansible-playbook deploy-docker.yml --extra-vars ansible_ssh_user=root ansible_ssh_pass=toor"
                 //ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
         }        
     }
