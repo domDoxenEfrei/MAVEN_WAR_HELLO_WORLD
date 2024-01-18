@@ -5,7 +5,7 @@ pipeline{
     }
 	
 	environment {
-        // Define the credential ID and the variable names
+        // Credential defined in Jenkins
         DOCKER_CREDENTIALS = credentials('docker-hub-pass')
     }
 
@@ -28,19 +28,16 @@ stages{
         steps{
             echo 'Login to Docker-Hub with docker-hub-pass credentials'
             sh "docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}"
-
             echo 'Push Docker image to Docker Hub'
             sh "docker push ernestefrei/devopsproject:latest"
         }
     }
   
     stage('Docker Deploy'){
-            steps{
-                echo 'Deploy Docker'
-                //sh "ansible-playbook deploy-docker.yml --extra-vars "ansible_ssh_user=root ansible_ssh_pass=toor""
-                ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'     
-    }
-    
-}
+        steps{
+            echo 'Deploy Docker'
+            ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'     
+    	}
+	}
 }
 }
