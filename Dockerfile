@@ -2,7 +2,7 @@
 # Take the war from the target and copy to webapps directory of the tomcat using the COPY command COPY SRC DEST
 
 # Use the official Tomcat 9 image as the base image
-FROM tomcat:9.0-jdk11
+FROM tomcat:9.0-alpine
 
 LABEL maintainer="ernest@mail.com"
 
