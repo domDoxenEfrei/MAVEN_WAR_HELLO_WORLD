@@ -7,7 +7,7 @@ FROM tomcat:9.0-alpine
 LABEL maintainer="ernest@mail.com"
 
 # Copy the WAR file from the target directory to the webapps directory
-ADD target/spring-boot-deployment.war /user/local/tomcat/webapps
+ADD target/spring-boot-deployment.war /usr/local/tomcat/webapps
 
 EXPOSE 8080
 
