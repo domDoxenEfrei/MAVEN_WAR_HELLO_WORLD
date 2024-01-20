@@ -20,7 +20,7 @@ pipeline {
                     def dockerHost = 'tcp://192.168.4.114:2375'
 
                     // Build Docker image
-                    bat "docker -H=${dockerHost} build C:\\Users\\T7429DD\\Desktop\\devops\\MAVEN_WAR_HELLO_WORLD -t domdoxe/finalproj:1.0"
+                    sh "docker build -t domdoxe/project
                 }
             }
         }
