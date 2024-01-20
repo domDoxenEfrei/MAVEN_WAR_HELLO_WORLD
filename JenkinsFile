@@ -1,52 +1,63 @@
-pipeline{
+pipeline {
     agent any
     tools {
-      maven 'Maven'
+        maven 'Maven'
     }
 
-    stages{
-       stage('Maven Build') {
-         steps {
-            echo 'Here you should trigger a maven build of your application using either bat(windows) or sh(linux)'
-            bat "mvn clean package"
-         }
-       }
-       
-      stage('Docker Build'){
-            steps{
-                echo 'In this step you should build your docker image using the docker build command'
-                echo 'So you need to build an image from the WAR that you generated previously'
-                echo 'Remember that starting point of your image should be tomcat in order to serve the application on the web'
-                bat "docker build C:\\Users\\T7429DD\\Desktop\\devops\\MAVEN_WAR_HELLO_WORLD -t domdoxe/finalproj:1.0"
-
+    stages {
+        stage('Maven Build') {
+            steps {
+                echo 'Triggering Maven build...'
+                bat "mvn clean package"
             }
         }
-        
-      stage('DockerHub Push'){
-            steps{
-                echo 'You should first login to your github account using the withCredentials synatx'
-                echo 'And for that you need to create the appropriate credentials to access the github account in Jenkins'
-                echo 'Then you need to push this image to the public registry dockerhub into your account'
-                echo 'Use the docker push command'
-                withcredentials([usernamePassword(credentialsId: 'docker-hub-pass',passwordVariable: 'password', usernameVariable: 'username')]){
-                bat "docker login -u \$(env.username) -p \$(env.password)"
+
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker image...'
+                script {
+                    // Specify the Docker daemon's TCP port
+                    def dockerHost = 'tcp://192.168.4.114:2375'
+
+                    // Build Docker image
+                    bat "docker -H=${dockerHost} build C:\\Users\\T7429DD\\Desktop\\devops\\MAVEN_WAR_HELLO_WORLD -t domdoxe/finalproj:1.0"
                 }
-
-                bat "docker push domdoxe/finalproj:1.0"
             }
         }
-  
-      stage('Docker Deploy'){
+
+        stage('DockerHub Push') {
+            steps {
+                echo 'Pushing Docker image to DockerHub...'
+                script {
+                    // Specify the Docker daemon's TCP port
+                    def dockerHost = 'tcp://192.168.4.114:2375'
+
+                    // Login to DockerHub
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        bat "docker -H=${dockerHost} login -u \$(env.username) -p \$(env.password)"
+                    }
+
+                    // Push Docker image to DockerHub
+                    bat "docker -H=${dockerHost} push domdoxe/finalproj:1.0"
+                }
+            }
+        }
+
+        stage('Docker Deploy') {
             agent {
                 label 'AnsibleControlNode'
             }
-            steps{
-                echo 'You should use the ansiblePlaybook syntax in order to call your playbook'
-                echo 'But before that you need to create an agent in order to execute the playbook on the Ansible controle node machine'
-                ansiblePlaybook credentialsId: 'docker-hub-pass', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+            steps {
+                echo 'Deploying Docker container using Ansible...'
+                script {
+                    // Specify the Docker daemon's TCP port
+                    def dockerHost = 'tcp://192.168.4.114:2375'
 
+                    // Run Ansible playbook to deploy Docker container
+                    ansiblePlaybook credentialsId: 'docker-hub-pass', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml', extras: "-e docker_host=${dockerHost}"
+                }
             }
-        }        
+        }
     }
-    
 }
+
