@@ -1,7 +1,5 @@
----
 - hosts: linuxclient1
-  become: True
-  become_user: root
+  become: true
   tasks:
     - name: Install yum-utils (use the yum module)
       yum:
@@ -30,7 +28,19 @@
     - name: Set Docker Hub credentials
       set_fact:
         dockerhub_username: "domdoxe"
-        dockerhub_token: "dckr_pat_J8gy0IbX4qDCZxdZt1022vRPQRw"
+        dockerhub_token: "dckr_pat_-58eLl-v2livvknIOGGLjEfYrVI"
+
+    - name: Ensure pip is installed
+      become: true
+      yum:
+        name: python-pip
+        state: present
+
+    - name: Install Docker SDK for Python
+      become: true
+      pip:
+        name: docker
+        state: present
 
     - name: Log into Docker Hub registry using the docker_login module
       docker_login:
