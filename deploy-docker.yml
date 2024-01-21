@@ -50,12 +50,6 @@
       pip:
         name: docker
 
-- hosts: all
-  tasks:
-    - name: Debug Host
-      debug:
-        var: inventory_hostname
-
 - name: Deploy Docker Container
   hosts: 192.168.4.115
   become: true
