@@ -4,13 +4,15 @@ pipeline {
         maven 'Maven'
     }
 
-    stages {
-        stage('Maven Build') {
-            steps {
-                echo 'Triggering Maven build...'
-                sh 'mvn clean package'
-            }
+stage('Maven Build') {
+    steps {
+        echo 'Triggering Maven build...'
+        script {
+            // Specify the full path to Maven binary
+            sh "/opt/apache-maven-3.9.6/bin/mvn clean package"
         }
+    }
+}
 
         stage('Docker Build') {
             steps {
