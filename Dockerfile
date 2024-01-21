@@ -1,11 +1,11 @@
-# You Should start from the tomcat version 8 image using the FROM command
-# Take the war from the target and copy to webapps directory of the tomcat using the COPY command COPY SRC DEST
+# Start from the tomcat version 8 image using the FROM command
+# Take the war from the target and copy it to the webapps directory of Tomcat using the COPY command
 
 FROM tomcat:latest
 
 LABEL maintainer="Dominic Doxen"
 
-ADD ./target/name.war C:\Users\T7429DD\Desktop\apache-tomcat-9.0.69\apache-tomcat-9.0.69\webapps
+COPY ./target/name.war /usr/local/tomcat/webapps/
 
 EXPOSE 8088
 
