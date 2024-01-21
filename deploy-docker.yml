@@ -1,5 +1,9 @@
-- hosts: linuxclient1
-  become: true
+---
+- name: Install and Deploy docker on linuxclient1
+  hosts: linuxclient1
+  become: True
+  become_user: root
+
   tasks:
     - name: Install yum-utils (use the yum module)
       yum:
@@ -7,16 +11,16 @@
         state: present
 
     - name: Download Docker repository file using the get_url
-      get_url:
-        url: https://download.docker.com/linux/centos/docker-ce.repo
-        dest: /etc/yum.repos.d/docker-ce.repo
+      shell: sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-    - name: Install Docker packages (engine) using yum module
+    - name: Install Docker packages (engine) using yum module, reference https://docs.docker.com/engine/install/centos/#installation-methods
       yum:
         name:
           - docker-ce
           - docker-ce-cli
           - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
         state: present
 
     - name: Start Docker service using the systemd module
@@ -24,37 +28,48 @@
         name: docker
         state: started
         enabled: yes
-
-    - name: Set Docker Hub credentials
-      set_fact:
-        dockerhub_username: "domdoxe"
-        dockerhub_token: "dckr_pat_-58eLl-v2livvknIOGGLjEfYrVI"
-
-    - name: Ensure pip is installed
-      become: true
+        
+    - name: Install Python
       yum:
-        name: python-pip
-        state: present
+        name:
+          - python
+        state: present      
 
-    - name: Install Docker SDK for Python
-      become: true
+    - name: Download get-pip.py
+      get_url:
+        url: https://bootstrap.pypa.io/pip/2.7/get-pip.py
+        dest: /tmp/get-pip.py
+
+    - name: Install pip
+      command: python /tmp/get-pip.py
+
+    - name: Upgrade pip
+      command: pip install --upgrade pip
+
+    - name: Install docker-SDK
       pip:
         name: docker
-        state: present
 
-    - name: Log into Docker Hub registry using the docker_login module
-      docker_login:
-        username: "{{ dockerhub_username }}"
-        password: "{{ dockerhub_token }}"
-        registry: https://index.docker.io/v1/
+- name: Deploy Docker Container
+  hosts: 192.168.4.115  # Change the host IP here
+  become: true
 
+  tasks:
     - name: Pull image and create the container using docker_container
-      docker_container:
-        name: your_container_name
-        image: "{{ dockerhub_username }}/your_image:your_tag"
-        state: started
-
+      docker_image:
+        name: domdoxe/project:latest
+        source: pull
+    
     - name: Start the container using docker_container
       docker_container:
-        name: your_container_name
+        name: tomcat_devops
+        image: domdoxe/project:latest
         state: started
+        tty: true
+        auto_remove: true
+        ports:
+          - "8080:8080"
+          
+    - name: Log out of DockerHub
+      docker_login:
+        state: absent
