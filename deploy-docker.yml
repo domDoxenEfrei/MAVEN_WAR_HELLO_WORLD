@@ -51,7 +51,7 @@
         name: docker
 
 - name: Deploy Docker Container
-  hosts: 192.168.4.115  # Change the host IP here
+  hosts: linuxclient1  # Change the host IP here
   become: true
 
   tasks:
