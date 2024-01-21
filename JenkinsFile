@@ -1,5 +1,10 @@
 pipeline {
     agent { label 'AnsibleControlNode' }
+
+    environment {
+        ANSIBLE_HOST_KEY_CHECKING = 'False'
+    }
+
     tools {
         maven 'Maven'
     }
