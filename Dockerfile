@@ -5,7 +5,7 @@ FROM tomcat:latest
 
 LABEL maintainer="Dominic Doxen"
 
-COPY ./target/name.war /usr/local/tomcat/webapps/
+COPY /tmp/project/target/name.war /usr/local/tomcat/webapps/
 
 EXPOSE 8088
 
