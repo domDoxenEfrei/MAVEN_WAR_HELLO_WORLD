@@ -59,7 +59,7 @@ pipeline {
                     def dockerHost = 'tcp://192.168.4.114:2375'
 
                     // Run Ansible playbook to deploy Docker container
-                    ansiblePlaybook credentialsId: 'docker-hub-credentials', installation: 'ansible', inventory: '/etc/hosts', playbook: 'deploy-docker.yml', extras: "-e docker_host=${dockerHost}"
+                    ansiblePlaybook credentialsId: 'docker-hub-credentials', installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'deploy-docker.yml', extras: "-e docker_host=${dockerHost}"
                 }
             }
         }
