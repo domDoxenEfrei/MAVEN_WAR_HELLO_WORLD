@@ -8,28 +8,27 @@ pipeline {
         stage('Maven Build') {
             steps {
                 echo 'Triggering Maven build...'
-                bat "mvn clean package"
+                sh 'mvn clean package'
             }
         }
 
-    stage('Docker Build') {
-        steps {
-            echo 'Building Docker image...'
-            script {
-                // Specify the Docker daemon's TCP port
-                def dockerHost = 'tcp://192.168.4.114:2375'
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker image...'
+                script {
+                    // Specify the Docker daemon's TCP port
+                    def dockerHost = 'tcp://192.168.4.114:2375'
 
-                // Build Docker image
-                sh "docker -H=$dockerHost build -t domdoxe/project ."
+                    // Build Docker image
+                    sh "docker -H=$dockerHost build -t domdoxe/project ."
 
-                // Log in to Docker Hub (replace 'username', 'password', and 'domdoxe/project' with your Docker Hub credentials and image name)
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh "docker login -u $domdoxe -p $dckr_pat_KyCQCSEDA_4Pcae6whxVsAe13Ok"
+                    // Log in to Docker Hub (replace 'username', 'password', and 'domdoxe/project' with your Docker Hub credentials and image name)
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh "docker login -u $domdoxe -p $dckr_pat_KyCQCSEDA_4Pcae6whxVsAe13Ok"
+                    }
                 }
             }
         }
-    }
-
 
         stage('DockerHub Push') {
             steps {
@@ -40,11 +39,11 @@ pipeline {
 
                     // Login to DockerHub
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'password', usernameVariable: 'username')]) {
-                        bat "docker -H=${dockerHost} login -u \$(env.username) -p \$(env.password)"
+                        sh "docker -H=${dockerHost} login -u \$(env.username) -p \$(env.password)"
                     }
 
                     // Push Docker image to DockerHub
-                    bat "docker -H=${dockerHost} push domdoxe/finalproj:1.0"
+                    sh "docker -H=${dockerHost} push domdoxe/finalproj:1.0"
                 }
             }
         }
