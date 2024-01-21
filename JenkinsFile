@@ -4,15 +4,16 @@ pipeline {
         maven 'Maven'
     }
 
-stage('Maven Build') {
-    steps {
-        echo 'Triggering Maven build...'
-        script {
-            // Specify the full path to Maven binary
-            sh "/opt/apache-maven-3.9.6/bin/mvn clean package"
+    stages {
+        stage('Maven Build') {
+            steps {
+                echo 'Triggering Maven build...'
+                script {
+                    // Specify the full path to Maven binary
+                    sh "/opt/apache-maven-3.9.6/bin/mvn clean package"
+                }
+            }
         }
-    }
-}
 
         stage('Docker Build') {
             steps {
@@ -45,26 +46,6 @@ stage('Maven Build') {
                     }
 
                     // Push Docker image to DockerHub
-                    sh "docker -H=${dockerHost} push domdoxe/finalproj:1.0"
-                }
-            }
-        }
+                    sh "docker -H=${dockerHost} push domdoxe/finalpro
 
-        stage('Docker Deploy') {
-            agent {
-                label 'AnsibleControlNode'
-            }
-            steps {
-                echo 'Deploying Docker container using Ansible...'
-                script {
-                    // Specify the Docker daemon's TCP port
-                    def dockerHost = 'tcp://192.168.4.114:2375'
-
-                    // Run Ansible playbook to deploy Docker container
-                    ansiblePlaybook credentialsId: 'docker-hub-pass', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml', extras: "-e docker_host=${dockerHost}"
-                }
-            }
-        }
-    }
-}
 
