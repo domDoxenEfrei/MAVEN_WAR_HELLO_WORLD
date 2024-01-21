@@ -7,6 +7,7 @@ pipeline{
 	environment {
         // Credential defined in Jenkins
         DOCKER_CREDENTIALS = credentials('docker-hub-pass')
+	ANSIBLE_HOST_KEY_CHECKING = 'False'
     }
 
 stages{
