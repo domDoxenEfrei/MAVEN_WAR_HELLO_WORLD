@@ -42,10 +42,28 @@ pipeline {
 
                     // Login to DockerHub
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'password', usernameVariable: 'username')]) {
-                        sh "docker -H=${dockerHost} login -u \$(env.username) -p \$(env.password)"
+                        sh "docker -H=${dockerHost} push domdoxe/project"
                     }
+                }
+            }
+        }
 
-                    // Push Docker image to DockerHub
-                    sh "docker -H=${dockerHost} push domdoxe/finalpro
+        stage('Docker Deploy') {
+            agent {
+                label 'AnsibleControlNode'
+            }
+            steps {
+                echo 'Deploying Docker container using Ansible...'
+                script {
+                    // Specify the Docker daemon's TCP port
+                    def dockerHost = 'tcp://192.168.4.114:2375'
+
+                    // Run Ansible playbook to deploy Docker container
+                    ansiblePlaybook credentialsId: 'docker-hub-pass', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml', extras: "-e docker_host=${dockerHost}"
+                }
+            }
+        }
+    }
+}
 
 
