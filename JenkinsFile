@@ -27,7 +27,7 @@ pipeline {
 
                     // Log in to Docker Hub (replace 'username', 'password', and 'domdoxe/project' with your Docker Hub credentials and image name)
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        sh "docker login -u $domdoxe -p $dckr_pat_KyCQCSEDA_4Pcae6whxVsAe13Ok"
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                     }
                 }
             }
@@ -40,9 +40,9 @@ pipeline {
                     // Specify the Docker daemon's TCP port
                     def dockerHost = 'tcp://192.168.4.114:2375'
 
-                     // Log in to Docker Hub (replace 'username', 'password', and 'domdoxe/project' with your Docker Hub credentials and image name)
+                    // Push Docker image to DockerHub
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        sh "docker login -u $domdoxe -p $dckr_pat_KyCQCSEDA_4Pcae6whxVsAe13Ok"
+                        sh "docker -H=$dockerHost push domdoxe/project"
                     }
                 }
             }
@@ -59,11 +59,10 @@ pipeline {
                     def dockerHost = 'tcp://192.168.4.114:2375'
 
                     // Run Ansible playbook to deploy Docker container
-                    ansiblePlaybook credentialsId: 'docker-hub-pass', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml', extras: "-e docker_host=${dockerHost}"
+                    ansiblePlaybook credentialsId: 'docker-hub-credentials', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml', extras: "-e docker_host=${dockerHost}"
                 }
             }
         }
     }
 }
-
 
